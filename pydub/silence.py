@@ -88,7 +88,7 @@ def detect_nonsilent(audio_segment, min_silence_len=1000, silence_thresh=-16, se
     return nonsilent_ranges
 
 
-def split_on_silence(audio_segment, min_silence_len=750, silence_thresh=-60, keep_silence=0,
+def split_on_silence(audio_segment, min_silence_len=1100, silence_thresh=-60, keep_silence=0,
                      seek_step=1):
     """
     audio_segment - original pydub.AudioSegment() object

@@ -1,17 +1,30 @@
 from pydub import AudioSegment
 from pydub.playback import play
 from pydub.silence import split_on_silence
+import os
 
 def match_target_amplitude(aChunk, target_dBFS):
     ''' Normalize given audio chunk '''
     change_in_dBFS = target_dBFS - aChunk.dBFS
     return aChunk.apply_gain(change_in_dBFS)
 
-song = AudioSegment.from_file("saki.mp4", "mp4")
+def check_or_create_file(dir):
+    if not os.path.exists(dir):
+        try:
+            os.mkdir(dir)
+        except OSError:
+            print ("Creation of the directory %s failed" % path)
+        else:
+            print ("Successfully created the directory %s " % path)
 
+filename = "mimikara bai5.mp4"
+song = AudioSegment.from_file(filename, "mp4")
+path = filename.split(".")[0]
+
+dir = ".//converted/{0}".format(path)
 
 #split track where silence is 2 seconds or more and get chunks
-
+#
 chunks = split_on_silence(song)
 #Process each chunk per requirements
 for i, chunk in enumerate(chunks):
@@ -26,4 +39,8 @@ for i, chunk in enumerate(chunks):
 
     #Export audio chunk with new bitrate
     print("exporting chunk{0}.mp3".format(i) )
-    normalized_chunk.export(".//converted/chunk{0}.mp3".format(i), bitrate='192k', format="mp3")
+
+    # check path or create
+    dir = ".//converted/{0}".format(path)
+    check_or_create_file(dir)
+    normalized_chunk.export(".//converted/{0}/chunk{1}.mp3".format(path,i), bitrate='192k', format="mp3")
